@@ -1,5 +1,3 @@
-# Метод оптимального исключения
-
 import numpy as np
 
 n = 7
@@ -18,33 +16,32 @@ matrix_copy = matrix.copy()
 vector = np.array([3.2, 4.3, -0.1, 3.5, 5.3, 9, 3.7])
 vector_copy = vector.copy()
 
-
-print(matrix, "\n\n", vector, "\n")
-
 divisor = matrix[0, 0]
 matrix[0, :] /= divisor
 vector[0] /= divisor
 k = 0
 
+# Цикл построчно
 while k < n - 1:
+
+    # Делаем 0 под главной диагональю
     for j in range(0, k + 1):
         multiplier = matrix[k + 1, j]
         matrix[k + 1, :] -= multiplier * matrix[j, :]
         vector[k + 1] -= multiplier * vector[j]
 
+    # Делаем 0 на главной диагонали
     divisor = matrix[k + 1, k + 1]
     matrix[k + 1, :] /= divisor
     vector[k + 1] /= divisor
 
+    # Получаем 0 над главной диагональю
     for j in range(0, k + 1):
         multiplier = matrix[j, k + 1]
         matrix[j] -= multiplier * matrix[k + 1, :]
         vector[j] -= multiplier * vector[k + 1]
     k += 1
 
-print(matrix, "\n\n", vector, "\n")
 
-print(matrix_copy.dot(vector), "\n")
-
-
+print("Vector = ", vector, "\n")
 print(matrix_copy.dot(vector) - vector_copy)
