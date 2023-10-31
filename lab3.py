@@ -44,4 +44,4 @@ while k < n - 1:
 
 
 print("Vector = ", vector, "\n")
-print(matrix_copy.dot(vector) - vector_copy)
+print("Погрешность:\n", abs(matrix_copy.dot(vector) - vector_copy))

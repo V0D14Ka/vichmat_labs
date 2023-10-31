@@ -2,7 +2,7 @@
 
 import numpy as np
 
-np.set_printoptions(linewidth=200)
+# np.set_printoptions(linewidth=200)
 
 n = 4
 
@@ -43,6 +43,7 @@ def lu(matrix):
 
 L, U = lu(matrix)
 
+# Обратная подстановка
 for i in range(0, n):
     for j in range(i + 1, n):
         multiplier = L[j][i]
@@ -58,5 +59,5 @@ for i in range(n - 1, -1, -1):
         U[j] = U[j] - multiplier * U[i, :]
         vector[j] = vector[j] - multiplier * vector[i]
 
-print("Answer(x):\n", vector, "\n\n")
-print("error:\n", abs(matrix.dot(vector) - vector_copy), "\n\n")
+print("Vector:\n", vector, "\n\n")
+print("Погрешность:\n", abs(matrix.dot(vector) - vector_copy), "\n\n")
