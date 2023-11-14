@@ -5,19 +5,17 @@ np.random.seed(123)
 
 n = 7
 
-mtx = np.array(
-    [
-        [0.411, 0.421, -0.333, 0.313, -0.141, -0.381, 0.245],
-        [0.241, 0.705, 0.139, -0.409, 0.321, 0.0625, 0.101],
-        [0.123, -0.239, 0.502, 0.901, 0.243, 0.819, 0.321],
-        [0.413, 0.309, 0.801, 0.865, 0.423, 0.118, 0.183],
-        [0.241, -0.221, -0.243, 0.134, 1.274, 0.712, 0.423],
-        [0.281, 0.525, 0.719, 0.118, -0.974, 0.808, 0.923],
-        [0.246, -0.301, 0.231, 0.813, -0.702, 1.223, 1.105],
-    ]
-)
+mtx = np.array([
+    [2.2, 4, -3, 1.5, 0.6, 2, 0.7],
+    [4, 3.2, 1.5, -0.7, -0.8, 3, 1],
+    [-3, 1.5, 1.8, 0.9, 3, 2, 2],
+    [1.5, -0.7, 0.9, 2.2, 4, 3, 1],
+    [0.6, -0.8, 3, 4, 3.2, 0.6, 0.7],
+    [2, 3, 2, 3, 0.6, 2.2, 4],
+    [0.7, 1, 2, 1, 0.7, 4, 3.2]
+])
 
-vector = np.array([0.096, 1.252, 1.024, 1.023, 1.155, 1.937, 1.673])
+vector = np.array([3.2, 4.3, -0.1, 3.5, 5.3, 9.0, 3.7])
 
 
 def Inverse(matrix):
@@ -42,30 +40,12 @@ def Inverse(matrix):
 
     inv_mtx = np.vstack((np.hstack((e1, e2)), np.hstack((e3, e4))))
 
-    return (D, inv_mtx) if dim == n else inv_mtx
+    return inv_mtx
 
 
-inv_mtx = Inverse(mtx)[0]
-inv_full = Inverse(mtx)[1]
+inv_full = Inverse(mtx)
 
-ans = (
-        np.pad(inv_mtx.dot(vector[: n - 1]), (0, 1))
-        + np.append(
-    (
-            inv_mtx.dot(mtx[: n - 1, n - 1:])
-            .dot(mtx[n - 1:, : n - 1])
-            .dot(inv_mtx)
-            .dot(vector[: n - 1])
-            - (inv_mtx.dot(mtx[: n - 1, n - 1:]) * vector[n - 1]).T
-    ),
-    -mtx[n - 1:, : n - 1].dot(inv_mtx).dot(vector[: n - 1]) + vector[n - 1],
-)
-        / (
-                mtx[n - 1, n - 1]
-                - mtx[n - 1:, : n - 1].dot(inv_mtx).dot(mtx[: n - 1, n - 1:])
-        )[0]
-)
+ans = inv_full.dot(vector)
 
-print(abs(mtx.dot(inv_full) - np.identity(n, dtype=float)), "\n")
 print(ans, "\n")
 print(abs(mtx.dot(ans) - vector), "\n")
