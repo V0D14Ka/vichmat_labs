@@ -16,13 +16,13 @@ mtx = np.array(
 
 vector = np.array([0.096, 1.252, 1.024, 1.023, 1.155, 1.937, 1.673])
 
-
+# QR разложение
 def QR(mtx):
     R = np.copy(mtx)
     Q = np.eye(n)
 
     for k in range(n - 1):
-        x = R[k:, k]
+        x = R[k:, k]  # Текущий столбец
         v = np.zeros_like(x)
         v[0] = np.sign(x[0]) * np.linalg.norm(x) + x[0]
         v[1:] = x[1:]
@@ -33,20 +33,24 @@ def QR(mtx):
 
         Qk = np.eye(n)
         Qk[k:, k:] = Qk[k:, k:] - 2 * np.outer(v, v)
+        print(Qk)
+        print("=======")
         Q = np.dot(Q, Qk)
 
     return Q, R
 
 
 Q, R = QR(mtx)
+print(Q.dot(R))
+# print(R)
 
 ans = Q.T.dot(vector)
 
+#Обратный ход
 for i in range(n - 1, -1, -1):
     ans[i] /= R[i, i]
     for j in range(0, i):
         ans[j] = ans[j] - R[j][i] * ans[i]
 
 print("Answer(x):\n", ans, "\n\n")
-print("A*x:\n", mtx.dot(ans), "\n\n")
-print("A*x error:\n", abs(mtx.dot(ans) - vector), "\n\n")
+print("A*x:\n", abs(mtx.dot(ans) - vector), "\n\n")
