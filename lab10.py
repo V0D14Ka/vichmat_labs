@@ -65,7 +65,6 @@ class Rotation:
             R[q, p] = s
             mtx = R.T.dot(mtx).dot(R)
             mtx[p, q] = mtx[q, p] = 0
-            # print(p, " ", q, "\n", mtx, "\n")
             steps += 1
 
         return steps, np.diag(mtx)
@@ -76,14 +75,21 @@ if __name__ == "__main__":
     np.random.seed(123)
 
     n = 4
-    p = 16
-    mtx = np.array([[10.9, 1.2, 2.1, 0.9],
-                    [1.2, 11.2, 1.5, 2.5],
-                    [2.1, 1.5, 9.8, 1.3],
-                    [0.9, 2.5, 1.3, 12.1]])
+    p = 3
+    mtx = np.array(
+        [
+            [-0.1687, 0.353699, 0.00854, 0.733624],
+            [0.353699, 0.056519, -0.723182, -0.07644],
+            [0.00854, -0.723182, 0.015938, 0.342333],
+            [0.733624, -0.07644, 0.342333, -0.045744],
+        ]
+    )
 
     ans = Rotation(n, mtx, p).solve()
 
     print("Initial mtx:\n", mtx, "\n\n")
     print("Steps:\n", ans[0], "\n\n")
-    print("Eigenvalues:\n", sorted(ans[1], reverse=True), "\n\n")
+    print("Eigenvalues:\n", sorted(ans[1]), "\n\n")
+
+    x = abs(np.array(sorted(np.linalg.eigvals(mtx))) - np.array(sorted(ans[1])))
+    print(x)
