@@ -9,19 +9,23 @@ def getMaxError(mat, x, vector):
     return np.max(np.abs(errors))
 
 
-mtx = np.array([[2, 1], [1, 2]])
 n = 2
-vector = np.array([4, 5])
+mtx = np.array([[10.9, 1.2, 2.1, 0.9],
+                [1.2, 11.2, 1.5, 2.5],
+                [2.1, 1.5, 9.8, 1.3],
+                [0.9, 2.5, 1.3, 12.1]])
+
+vector = np.array([-7.0, 5.3, 10.3, 24.6])
+
 e = 1e-3
 maxiters = 10
 
-
 n = mtx.shape[0]
 ans = np.zeros(n)
-eigs = Rotation(n, mtx, 10).solve().answer
+eigs = Rotation(n, mtx, 10).solve()[1]
+
 lmin = np.min(eigs)
 lmax = np.max(eigs)
-
 
 tau0 = 2 / (lmin + lmax)
 nnn = lmin / lmax
@@ -39,9 +43,6 @@ while getMaxError(mtx, ans, vector) > e:
     if steps == maxiters:
         break
 
-print("Initial mtx:\n", mtx, "\n\n")
-print("Initial vector:\n", vector, "\n\n")
 print("Steps:\n", steps, "\n\n")
 print("Answer(x):\n", ans, "\n\n")
-print("A*x:\n", mtx.dot(ans), "\n\n")
 print("A*x error:\n", abs(mtx.dot(ans) - vector), "\n\n")

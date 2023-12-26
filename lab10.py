@@ -27,21 +27,28 @@ class Rotation:
         return i_l, j_l
 
     def check_tol(self, matrix):
+
+        # Преграда
         self.tol = np.sqrt(max(abs(np.diag(matrix)))) * (10 ** (-self.k))
+
+        #Проверка внедиагональных элементов
         for i in range(self.n):
             for j in range(self.n):
                 if i == j:
                     continue
                 if abs(matrix[i, j]) >= self.tol:
                     return False
+
         if self.k < self.p:
             self.k += 1
             return False
+
         return True
 
     def solve(self):
         mtx = self.mtx
         steps = 0
+
         while not self.check_tol(mtx):
             q, p = self.index_of_largest(mtx)
 
@@ -70,16 +77,13 @@ if __name__ == "__main__":
 
     n = 4
     p = 16
-    mtx = np.array(
-        [
-            [-0.1687, 0.353699, 0.00854, 0.733624],
-            [0.353699, 0.056519, -0.723182, -0.07644],
-            [0.00854, -0.723182, 0.015938, 0.342333],
-            [0.733624, -0.07644, 0.342333, -0.045744],
-        ]
-    )
-    ans1 = Rotation(n, mtx, p).solve()
+    mtx = np.array([[10.9, 1.2, 2.1, 0.9],
+                    [1.2, 11.2, 1.5, 2.5],
+                    [2.1, 1.5, 9.8, 1.3],
+                    [0.9, 2.5, 1.3, 12.1]])
+
+    ans = Rotation(n, mtx, p).solve()
 
     print("Initial mtx:\n", mtx, "\n\n")
-    print("Steps:\n", ans1[0], "\n\n")
-    print("Eigenvalues:\n", sorted(ans1[1], reverse=True), "\n\n")
+    print("Steps:\n", ans[0], "\n\n")
+    print("Eigenvalues:\n", sorted(ans[1], reverse=True), "\n\n")
