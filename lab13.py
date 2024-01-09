@@ -1,8 +1,5 @@
 import numpy as np
 
-def checkEig(Am, lm, vm):
-    return np.max(np.abs(Am @ vm - lm * vm))
-
 def EdgingMethod(mat):
     n = mat.shape[0]
     inv = np.zeros((n, n))
@@ -27,42 +24,36 @@ def EdgingMethod(mat):
 
     return inv
 
-def getMax(x):
-    m = np.max(np.abs(x[0]))
-    l = x[0]
-
-    for i in range(x.shape[0]):
-        if np.max(np.abs(x[i])) > m:
-            m = np.max(np.abs(x[i]))
-            l = x[i]
-
-    return l
-
-def invIterationMethod(A, e):
-    n = A.shape[0]
-    x = np.ones(n)
-    l = 1
-    invA = EdgingMethod(A)
-
-    iters = 0
-    xlast = x + 1
-    while np.max(np.abs(xlast - x)) > e:
-        xlast = x
-        iters += 1
-        l = getMax(x)
-        x = invA @ (x / l)
-
-    print(f'iters: {iters} \t\t l: {1 / l} \t\t, x: {x / l}')
-    print(np.linalg.eig(A).eigenvectors / np.max(np.abs(np.linalg.eig(A).eigenvectors[:, 1])))
-    print(np.linalg.eig(A).eigenvalues)
-    print(checkEig(A, 1 / l, x))
-
-
-e = 1e-13
+e = 1e-9
 
 A = np.array([[2.2, 1, 0.5, 2],
               [1, 1.3, 2, 1],
               [0.5, 2, 0.5, 1.6],
               [2, 1, 1.6, 2]])
 
-invIterationMethod(A, e)
+n = A.shape[0]
+x = np.ones(n)
+l = 1
+invA = EdgingMethod(A)
+
+steps = 0
+while np.max(np.abs(A.dot(x) - l * x)) > e:
+    steps += 1
+    i = np.where(np.abs(x) == np.max(np.abs(x)))[0][0]
+    l = x[i]
+    x = A.dot((x / l))
+
+
+print(f'iters: {steps} \n\nl: {1 / l} \n\nx: {x / l}\n\n')
+print(
+    np.linalg.eig(A).eigenvectors[:, 0]
+    / np.max(np.abs(np.linalg.eig(A).eigenvectors[:, 0]))
+)
+print(np.linalg.eig(invA).eigenvalues)
+print(np.max(np.abs(A @ x - l * x)))
+
+
+
+
+
+
