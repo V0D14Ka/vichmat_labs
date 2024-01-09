@@ -38,4 +38,4 @@ print(
 )
 print(np.linalg.eig(A).eigenvalues)
 
-print(np.max(np.abs(A @ x - l * x)))
+print(np.max(np.abs(A.dot(x) - l * x)))

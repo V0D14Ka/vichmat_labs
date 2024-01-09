@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def EdgingMethod(mat):
     n = mat.shape[0]
     inv = np.zeros((n, n))
@@ -21,8 +22,8 @@ def EdgingMethod(mat):
         inv[i, :i] = q.reshape(i)
         inv[i, i] = alph
 
-
     return inv
+
 
 e = 1e-9
 
@@ -37,23 +38,16 @@ l = 1
 invA = EdgingMethod(A)
 
 steps = 0
-while np.max(np.abs(A.dot(x) - l * x)) > e:
+while np.max(np.abs(invA.dot(x) - l * x)) > e:
     steps += 1
     i = np.where(np.abs(x) == np.max(np.abs(x)))[0][0]
     l = x[i]
-    x = A.dot((x / l))
+    x = invA.dot((x / l))
 
-
-print(f'iters: {steps} \n\nl: {1 / l} \n\nx: {x / l}\n\n')
+print(f'iters: {steps} \n\nl: {l} \n\nx: {x / l}\n\n')
 print(
     np.linalg.eig(A).eigenvectors[:, 0]
     / np.max(np.abs(np.linalg.eig(A).eigenvectors[:, 0]))
 )
 print(np.linalg.eig(invA).eigenvalues)
-print(np.max(np.abs(A @ x - l * x)))
-
-
-
-
-
-
+print(np.max(np.abs(A.dot(x) - (1 / l) * x)))
